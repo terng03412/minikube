@@ -1,58 +1,82 @@
-# minikube
-This guide will walk you through the process of installing Minikube on a Mac with an M1 chip. 
+# MiniKF: A Fast and Easy Way to Deploy Kubeflow on Your Laptop
 
-# Installing Minikube on Mac M1
+MiniKF offers a production-ready, full-fledged, local Kubeflow deployment that installs in minutes. It's designed for quick experimentation and running complete Kubeflow Pipelines. When you're ready to scale up, you can move to a Kubeflow cloud deployment with one click, without having to rewrite anything.
 
-This guide will walk you through the process of installing Minikube on a Mac with an M1 chip.
+For more information, please see the official announcement and the rationale behind MiniKF.
+
+## Community Support
+
+Join the discussion on the #minikf Slack channel to ask questions, request features, and get support for MiniKF. To join the Kubeflow Slack workspace, please request an invite.
+
+## System Requirements
+
+For a smooth experience, we recommend that your system meets the following requirements:
+* 12GB RAM
+* 2 CPUs
+* 50GB disk space
+
+## Supported Operating Systems
+
+MiniKF runs on all major operating systems:
+* Linux
+* macOS
+* Windows
 
 ## Prerequisites
 
-1. Ensure you have Homebrew installed. If not, install it from [brew.sh](https://brew.sh/).
+Before installing MiniKF, you need to have the following software installed on your laptop:
+* Vagrant
+  - Install from: https://developer.hashicorp.com/vagrant/install
+* VirtualBox
+  - **Important**: MiniKF currently requires VirtualBox 7.0, as the latest version of MiniKube does not support VirtualBox 7.1.
+  - Install from: https://www.virtualbox.org/wiki/Download_Old_Builds_7_0
 
-2. Install Docker Desktop for Apple Silicon. You can download it from the [official Docker website](https://www.docker.com/products/docker-desktop).
+## MiniKF Installation
 
-## Installation Steps
+1. Open a terminal on your laptop
+2. Create a new directory and switch into it
+3. Run the following commands to install MiniKF:
 
-1. Install Minikube using Homebrew:
    ```
-   brew install minikube
-   ```
-
-2. Start Minikube with the Docker driver:
-   ```
-   minikube start --driver=docker
-   ```
-
-3. Verify the installation:
-   ```
-   minikube status
+   vagrant init arrikto/minikf
+   vagrant up
    ```
 
-4. (Optional) Install kubectl:
+4. MiniKF will take a few minutes to boot. 
+5. When the boot process is complete, navigate to http://10.10.10.10 in your web browser
+6. Follow the on-screen instructions to start Kubeflow and Rok
+
+## MiniKF Upgrade
+
+If you're upgrading from a previous version, follow these step-by-step instructions:
+
+1. Upgrade the MiniKF box to the latest version:
    ```
-   brew install kubectl
+   vagrant box update
    ```
 
-5. (Optional) Enable the Minikube dashboard:
+2. Ensure you have updated to the latest version:
    ```
-   minikube dashboard
+   vagrant box list
    ```
 
-## Troubleshooting
+3. Upgrade the `vagrant-persistent-storage` plugin to v0.0.47 or later:
+   ```
+   vagrant plugin update vagrant-persistent-storage
+   ```
 
-- If you encounter any issues with the Docker driver, you can try using the hyperkit driver instead:
-  ```
-  minikube start --driver=hyperkit
-  ```
+4. Destroy the VM:
+   ```
+   vagrant destroy
+   ```
 
-- Ensure your Docker Desktop is running before starting Minikube.
+5. Remove all local state. This will remove all of your customization in MiniKF (notebooks, pipelines, Rok snapshots):
+   * Windows: `del minikf-user-data.vdi`
+   * Linux/macOS: `rm minikf-user-data.vdi`
 
-- If you face any "connection refused" errors, try stopping and restarting Minikube:
-  ```
-  minikube stop
-  minikube start
-  ```
+6. Re-create your VM:
+   ```
+   vagrant up
+   ```
 
-Remember, Minikube creates a single-node Kubernetes cluster on your local machine. It's great for development and testing, but not suitable for production environments.
-
-For more detailed information and advanced configurations, refer to the [official Minikube documentation](https://minikube.sigs.k8s.io/docs/start/).
+Remember to back up any important data before performing an upgrade, as this process will remove all local customizations.

@@ -27,6 +27,12 @@ MiniKF runs on all major operating systems:
 Before installing MiniKF, you need to have the following software installed on your laptop:
 * Vagrant
   - Install from: https://developer.hashicorp.com/vagrant/install
+OR this following code
+   ```
+    brew tap hashicorp/tap
+    brew install hashicorp/tap/hashicorp-vagrant
+   ```
+  
 * VirtualBox
   - **Important**: MiniKF currently requires VirtualBox 7.0, as the latest version of MiniKube does not support VirtualBox 7.1.
   - Install from: https://www.virtualbox.org/wiki/Download_Old_Builds_7_0
